@@ -72,12 +72,6 @@ class Structure:
 	def copy_buffer(self, data: (bytes, bytearray), index: int) -> None:
 		pack_into(f"{len(data)}s", self.buffer, index, data)
 
-	@staticmethod
-	def create(data: (bytes, bytearray), endian: Endian = Endian.LITTLE):
-		s = Structure(endian)
-		s.load_buffer(data)
-		return s
-
 	def get_struct_value(self, key: str):
 		(index, size, count, t) = self.lookup[key]
 		tt = self._translate_type(t)
@@ -90,10 +84,6 @@ class Structure:
 
 	def set_struct_value(self, key: str, value):
 		(index, size, count, t) = self.lookup[key]
-		#if t == StructType.UINT8ARRAY and len(value) < count:
-		#	tmp = bytearray(count)
-		#	pack_into(self.endian + str(count) + self._translate_type(t), tmp, 0, value)
-		#	value = tmp
 		tt = self._translate_type(t)
 		if t == StructType.UINT8 and count > 1:
 			tt = "s"
